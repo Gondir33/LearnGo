@@ -1,0 +1,200 @@
+basePath: /
+definitions:
+  address.Address:
+    properties:
+      lat:
+        type: string
+      lon:
+        type: string
+    type: object
+  address.GeocodeRequest:
+    properties:
+      lat:
+        type: string
+      lon:
+        type: string
+    type: object
+  address.GeocodeResponse:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/address.Address'
+        type: array
+    type: object
+  address.SearchRequest:
+    properties:
+      query:
+        type: string
+    type: object
+  address.SearchResponse:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/address.Address'
+        type: array
+    type: object
+  main.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  main.LoginResponse:
+    properties:
+      status:
+        type: string
+      token:
+        type: string
+    type: object
+  main.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  main.RegisterResponse:
+    properties:
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /api/address/geocode:
+    post:
+      consumes:
+      - application/json
+      description: Post Address
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/address.GeocodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.GeocodeResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            type: string
+        "404":
+          description: 404 not found
+          schema:
+            type: string
+        "500":
+          description: Cервис https://dadata.ru не доступен
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Search
+      tags:
+      - list
+  /api/address/search:
+    post:
+      consumes:
+      - application/json
+      description: Post Address
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/address.SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.SearchResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            type: string
+        "404":
+          description: 404 not found
+          schema:
+            type: string
+        "500":
+          description: Cервис https://dadata.ru не доступен
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Search
+      tags:
+      - list
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: login account
+      operationId: login
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
+        "403":
+          description: invalid token
+          schema:
+            type: string
+      summary: Login
+      tags:
+      - auth
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: Post Register
+      operationId: create-account
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/main.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.RegisterResponse'
+        "403":
+          description: invalid token
+          schema:
+            type: string
+      summary: Register
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: Login
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

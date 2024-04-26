@@ -1,0 +1,111 @@
+basePath: /
+definitions:
+  address.Address:
+    properties:
+      lat:
+        type: string
+      lon:
+        type: string
+    type: object
+  address.GeocodeRequest:
+    properties:
+      lat:
+        type: string
+      lon:
+        type: string
+    type: object
+  address.GeocodeResponse:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/address.Address'
+        type: array
+    type: object
+  address.SearchRequest:
+    properties:
+      query:
+        type: string
+    type: object
+  address.SearchResponse:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/address.Address'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /api/address/geocode:
+    post:
+      consumes:
+      - application/json
+      description: Post Address
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/address.GeocodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.GeocodeResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            type: string
+        "404":
+          description: 404 not found
+          schema:
+            type: string
+        "500":
+          description: Cервис https://dadata.ru не доступен
+          schema:
+            type: string
+      summary: Search
+      tags:
+      - Geocode
+  /api/address/search:
+    post:
+      consumes:
+      - application/json
+      description: Post Address
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/address.SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.SearchResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            type: string
+        "404":
+          description: 404 not found
+          schema:
+            type: string
+        "500":
+          description: Cервис https://dadata.ru не доступен
+          schema:
+            type: string
+      summary: Search
+      tags:
+      - search
+swagger: "2.0"

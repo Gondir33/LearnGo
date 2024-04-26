@@ -1,0 +1,150 @@
+basePath: /
+definitions:
+  models.Address:
+    properties:
+      lat:
+        type: string
+      lon:
+        type: string
+    type: object
+  service.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  service.LoginResponse:
+    properties:
+      status:
+        type: string
+      token:
+        type: string
+    type: object
+  service.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  service.RegisterResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  service.SearchRequest:
+    properties:
+      query:
+        type: string
+    type: object
+  service.SearchResponse:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/models.Address'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /api/address/search:
+    post:
+      consumes:
+      - application/json
+      description: Post Address
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/service.SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.SearchResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            type: string
+        "404":
+          description: 404 not found
+          schema:
+            type: string
+        "500":
+          description: Cервис https://dadata.ru не доступен
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Search
+      tags:
+      - list
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: login account
+      operationId: login
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/service.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.LoginResponse'
+        "403":
+          description: invalid token
+          schema:
+            type: string
+      summary: Login
+      tags:
+      - auth
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: Post Register
+      operationId: create-account
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/service.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.RegisterResponse'
+        "403":
+          description: invalid token
+          schema:
+            type: string
+      summary: Register
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: Login
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

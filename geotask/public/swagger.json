@@ -1,0 +1,128 @@
+{
+  "consumes": [
+    "application/json",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation of auto trade API.\n\nSchemes:\nhttp\nhttps",
+    "title": "infoblog.",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/api/status": {
+      "get": {
+        "tags": [
+          "status"
+        ],
+        "summary": "Получение статуса сервиса.",
+        "operationId": "status",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/strategyCreateResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Courier": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/Point"
+        },
+        "score": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Score"
+        }
+      },
+      "x-go-package": "gitlab.com/ptflp/geotask/module/courier/models"
+    },
+    "CourierStatus": {
+      "type": "object",
+      "properties": {
+        "courier": {
+          "$ref": "#/definitions/Courier"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Orders"
+        }
+      },
+      "x-go-package": "gitlab.com/ptflp/geotask/module/courierfacade/models"
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreatedAt"
+        },
+        "delivery_price": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "DeliveryPrice"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ID"
+        },
+        "is_delivered": {
+          "type": "boolean",
+          "x-go-name": "IsDelivered"
+        },
+        "lat": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Lat"
+        },
+        "lng": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Lng"
+        },
+        "price": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Price"
+        }
+      },
+      "x-go-package": "gitlab.com/ptflp/geotask/module/order/models"
+    },
+    "Point": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Lat"
+        },
+        "lng": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Lng"
+        }
+      },
+      "x-go-package": "gitlab.com/ptflp/geotask/module/courier/models"
+    }
+  },
+  "responses": {
+    "strategyCreateResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/CourierStatus"
+      }
+    }
+  }
+}

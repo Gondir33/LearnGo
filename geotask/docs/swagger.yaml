@@ -1,0 +1,64 @@
+basePath: /
+definitions:
+  models.Courier:
+    properties:
+      location:
+        $ref: '#/definitions/models.Point'
+      score:
+        type: integer
+    type: object
+  models.CourierStatus:
+    properties:
+      courier:
+        $ref: '#/definitions/models.Courier'
+      orders:
+        items:
+          $ref: '#/definitions/models.Order'
+        type: array
+    type: object
+  models.Order:
+    properties:
+      created_at:
+        type: string
+      delivery_price:
+        type: number
+      id:
+        type: integer
+      is_delivered:
+        type: boolean
+      lat:
+        type: number
+      lng:
+        type: number
+      price:
+        type: number
+    type: object
+  models.Point:
+    properties:
+      lat:
+        type: number
+      lng:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /api/status:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CourierStatus'
+      summary: Получение статуса сервиса
+      tags:
+      - status
+swagger: "2.0"

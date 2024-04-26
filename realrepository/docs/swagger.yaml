@@ -1,0 +1,193 @@
+basePath: /
+definitions:
+  controller.CreateUserRequest:
+    properties:
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  controller.DeleteUserRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  controller.GetByIdUserResponse:
+    properties:
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  controller.ListUserRequest:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
+    type: object
+  controller.UpdateUserRequest:
+    properties:
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.User:
+    properties:
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /api/users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get By id
+      parameters:
+      - description: request
+        in: body
+        name: input
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.GetByIdUserResponse'
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: GetByID
+      tags:
+      - user
+  /api/users/create:
+    post:
+      consumes:
+      - application/json
+      description: Post Create
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Create
+      tags:
+      - user
+  /api/users/delete:
+    post:
+      consumes:
+      - application/json
+      description: Post Delet
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controller.DeleteUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Delete
+      tags:
+      - user
+  /api/users/list:
+    post:
+      consumes:
+      - application/json
+      description: Post List
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ListUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: List
+      tags:
+      - user
+  /api/users/update:
+    post:
+      consumes:
+      - application/json
+      description: Post Update
+      parameters:
+      - description: request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Update
+      tags:
+      - user
+swagger: "2.0"

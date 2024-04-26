@@ -1,0 +1,519 @@
+basePath: /
+definitions:
+  handler.CreateOrderRequest:
+    properties:
+      complete:
+        type: boolean
+      id:
+        type: integer
+      pet_id:
+        type: integer
+      quantity:
+        type: integer
+      ship_date:
+        type: string
+      status:
+        type: string
+    type: object
+  handler.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+      username:
+        type: string
+    type: object
+  handler.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Order:
+    properties:
+      complete:
+        type: boolean
+      id:
+        type: integer
+      pet_id:
+        type: integer
+      quantity:
+        type: integer
+      ship_date:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Pet:
+    properties:
+      category:
+        $ref: '#/definitions/models.Category'
+      id:
+        type: integer
+      name:
+        type: string
+      photo_urls:
+        items:
+          type: string
+        type: array
+      status:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+    type: object
+  models.Tag:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /pet:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Pet object that needs to be added to the store
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Pet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Add a new pet to the store
+      tags:
+      - pet
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Pet object that needs to be added to the store
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Pet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Update an existing pet to the store
+      tags:
+      - pet
+  /pet/{petId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Pet id to delete
+        in: path
+        name: petId
+        required: true
+        type: integer
+      - description: api_key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Dletes a pet
+      tags:
+      - pet
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID of pet to return
+        in: path
+        name: petId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pet'
+      security:
+      - ApiKeyAuth: []
+      summary: Find pet by ID
+      tags:
+      - pet
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID of pet that needs to be updated
+        in: path
+        name: petId
+        required: true
+        type: integer
+      - description: Updated name of the pet
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: Updated status of the pet
+        in: query
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Updates a pet in the store with form data
+      tags:
+      - pet
+  /pet/findByStatus:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 'Status values that need to be considered for filter\nAvailable
+          values : available, pending, sold'
+        in: query
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pet'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Find Pets by status
+      tags:
+      - pet
+  /store/inventory:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Returns pet inventory by status
+      tags:
+      - store
+  /store/order:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order Info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Place an order for a pet
+      tags:
+      - store
+  /store/order/{orderId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: "1"
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete purchase order by ID
+      tags:
+      - store
+    get:
+      consumes:
+      - application/json
+      description: For valid response try integer IDs with value >= 1 and <= 10. Other
+        values will generated exceptions
+      parameters:
+      - description: "1"
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+      summary: Find purchase order by ID
+      tags:
+      - store
+  /user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Account info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create user
+      tags:
+      - user
+  /user/{username}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete user
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get user by username
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: Account
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update user
+      tags:
+      - user
+  /user/createWithArray:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Account
+        in: body
+        name: request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.User'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Creates list of users with given input array
+      tags:
+      - user
+  /user/createWithList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Account
+        in: body
+        name: request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.User'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Creates list of users with given input array
+      tags:
+      - user
+  /user/login:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bearer \napi_key
+          headers:
+            X-Expires-After:
+              description: date in UTC when token expires
+              type: string
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              type: string
+          schema:
+            type: string
+      summary: logs user into the system
+      tags:
+      - user
+  /user/logout:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Logs out current logged in user session
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: Login
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

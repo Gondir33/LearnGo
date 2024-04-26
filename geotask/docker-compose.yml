@@ -1,0 +1,32 @@
+# 2 service: golang api and redis
+version: '3.7'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: api
+    ports:
+      - 3080:${SERVER_PORT}
+      # for debugging
+      # - "4000:4000"
+    networks:
+        - skynet
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - VIRTUAL_HOST=courier.ptflp.ru
+      - LETSENCRYPT_HOST=courier.ptflp.ru
+      - VIRTUAL_PORT=${SERVER_PORT}
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - skynet
+    ports:
+      - "127.0.0.1:6379:6379"
+networks:
+  skynet:
+    external: false

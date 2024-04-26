@@ -1,0 +1,274 @@
+basePath: /
+definitions:
+  controller.CreateUserRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  models.Author:
+    properties:
+      name:
+        type: string
+    type: object
+  models.AuthorWithBooks:
+    properties:
+      author:
+        $ref: '#/definitions/models.Author'
+      books:
+        items:
+          $ref: '#/definitions/models.Book'
+        type: array
+    type: object
+  models.Book:
+    properties:
+      name:
+        type: string
+    type: object
+  models.BookWithAuthor:
+    properties:
+      author:
+        $ref: '#/definitions/models.Author'
+      book:
+        $ref: '#/definitions/models.Book'
+    type: object
+  models.User:
+    properties:
+      name:
+        type: string
+    type: object
+  models.UserDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.UsersWithBook:
+    properties:
+      rentedBooks:
+        items:
+          $ref: '#/definitions/models.BookWithAuthor'
+        type: array
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for HugoMap Application
+  title: HugoMap
+  version: "1.0"
+paths:
+  /author:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Account info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Author'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create Author
+      tags:
+      - library
+  /book/{id_author}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Book info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      - description: id_author
+        in: path
+        name: id_author
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create book
+      tags:
+      - library
+  /book/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: id_book
+        in: query
+        name: id_book
+        required: true
+        type: integer
+      - description: id_user
+        in: query
+        name: id_user
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get id_book for id_user
+      tags:
+      - library
+  /book/hand:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: id_book
+        in: query
+        name: id_book
+        required: true
+        type: integer
+      - description: id_user
+        in: query
+        name: id_user
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: hand id_book for id_user
+      tags:
+      - library
+  /list/authors:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AuthorWithBooks'
+            type: array
+      summary: Get Authors
+      tags:
+      - library
+  /list/book:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.BookWithAuthor'
+            type: array
+      summary: Get Books
+      tags:
+      - library
+  /rentedbook:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.UsersWithBook'
+            type: array
+      summary: RentedBooks
+      tags:
+      - library
+  /user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Account info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create user
+      tags:
+      - user
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDTO'
+      summary: Get user by id
+      tags:
+      - user
+  /user/{username}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDTO'
+      summary: Get user by username
+      tags:
+      - user
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.UserDTO'
+            type: array
+      summary: List Users
+      tags:
+      - user
+swagger: "2.0"

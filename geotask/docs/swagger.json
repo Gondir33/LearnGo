@@ -1,0 +1,99 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API Server for HugoMap Application",
+        "title": "HugoMap",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/status": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "status"
+                ],
+                "summary": "Получение статуса сервиса",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.CourierStatus"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Courier": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "$ref": "#/definitions/models.Point"
+                },
+                "score": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.CourierStatus": {
+            "type": "object",
+            "properties": {
+                "courier": {
+                    "$ref": "#/definitions/models.Courier"
+                },
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Order"
+                    }
+                }
+            }
+        },
+        "models.Order": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "delivery_price": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_delivered": {
+                    "type": "boolean"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.Point": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}
